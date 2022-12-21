@@ -1,6 +1,6 @@
 require("albertocerrone.packer")
 require("albertocerrone.set")
-require("albertocerrone.remap")
+require("albertocerrone.keymap")
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
