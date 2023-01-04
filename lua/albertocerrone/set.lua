@@ -39,3 +39,6 @@ vim.o.completeopt = 'menuone,noselect'
 -- Set scrolloff
 vim.o.scrolloff = 8
 
+-- Open new split below and right
+vim.o.splitbelow = true
+vim.o.splitright = true
