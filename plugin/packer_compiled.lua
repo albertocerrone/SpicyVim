@@ -104,6 +104,11 @@ _G.packer_plugins = {
     path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/gitsigns.nvim",
     url = "https://github.com/lewis6991/gitsigns.nvim"
   },
+  ["impatient.nvim"] = {
+    loaded = true,
+    path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/impatient.nvim",
+    url = "https://github.com/lewis6991/impatient.nvim"
+  },
   ["indent-blankline.nvim"] = {
     loaded = true,
     path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/indent-blankline.nvim",
@@ -146,11 +151,6 @@ _G.packer_plugins = {
     path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/opt/nvim-treesitter-textobjects",
     url = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects"
   },
-  ["onedark.nvim"] = {
-    loaded = true,
-    path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/onedark.nvim",
-    url = "https://github.com/navarasu/onedark.nvim"
-  },
   ["packer.nvim"] = {
     loaded = true,
     path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/packer.nvim",
@@ -173,6 +173,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/telescope.nvim",
     url = "https://github.com/nvim-telescope/telescope.nvim"
+  },
+  ["tokyonight.nvim"] = {
+    loaded = true,
+    path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/tokyonight.nvim",
+    url = "https://github.com/folke/tokyonight.nvim"
   },
   ["vim-fugitive"] = {
     loaded = true,

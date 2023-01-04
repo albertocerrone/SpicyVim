@@ -23,10 +23,13 @@ require('packer').startup(function(use)
     },
   }
 
-  use { -- Autocompletion
+  -- Autocompletion
+  use {
     'hrsh7th/nvim-cmp',
-    requires = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
+    requires = { 'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'L3MON4D3/LuaSnip',
+      'saadparwaiz1/cmp_luasnip', },
   }
+  use "onsails/lspkind-nvim"
 
   use { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
@@ -59,6 +62,9 @@ require('packer').startup(function(use)
 
   -- Improve startup time
   use 'lewis6991/impatient.nvim'
+
+  -- Debugger
+  use 'mfussenegger/nvim-dap'
 
   -- Add custom plugins to packer from /nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
