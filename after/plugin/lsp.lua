@@ -1,4 +1,4 @@
--- LSP settings 
+-- LSP settings
 -- TODO use 'mfussenegger/nvim-dap'
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
@@ -53,7 +53,7 @@ require('mason').setup()
 
 -- Enable the following language servers
 -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
-local servers = { 'rust_analyzer', 'pylsp', 'tsserver', 'sumneko_lua'}
+local servers = { 'rust_analyzer', 'pylsp', 'tsserver', 'sumneko_lua', 'sourcery' }
 
 -- Ensure the servers above are installed
 require('mason-lspconfig').setup {
@@ -101,3 +101,12 @@ require('lspconfig').sumneko_lua.setup {
     },
   },
 }
+
+-- this is for diagnositcs signs on the line number column
+-- use this to beautify the plain E W signs to more fun ones
+-- !important nerdfonts needs to be setup for this to work in your terminal
+local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+for type, icon in pairs(signs) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
