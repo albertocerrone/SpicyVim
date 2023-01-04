@@ -1,4 +1,5 @@
--- LSP settings.
+-- LSP settings 
+-- TODO use 'mfussenegger/nvim-dap'
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
@@ -52,7 +53,7 @@ require('mason').setup()
 
 -- Enable the following language servers
 -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
-local servers = { 'rust_analyzer', 'pyright', 'tsserver', 'sumneko_lua', 'gopls' }
+local servers = { 'rust_analyzer', 'pylsp', 'tsserver', 'sumneko_lua'}
 
 -- Ensure the servers above are installed
 require('mason-lspconfig').setup {
