@@ -2,6 +2,21 @@
 local cmp = require 'cmp'
 local luasnip = require 'luasnip'
 local lspkind = require 'lspkind'
+local tabnine = require('cmp_tabnine.config')
+
+tabnine:setup({
+  max_lines = 1000,
+  max_num_results = 20,
+  sort = true,
+  run_on_every_keystroke = true,
+  snippet_placeholder = '..',
+  ignored_file_types = {
+    -- default is not to ignore
+    -- uncomment to ignore in lua:
+    -- lua = true
+  },
+  show_prediction_strength = false
+})
 
 
 cmp.setup {
@@ -38,8 +53,9 @@ cmp.setup {
       end
     end, { 'i', 's' }),
   },
-
+  
   sources = {
+    { name = 'cmp_tabnine' },
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
     { name = 'path' },
@@ -54,10 +70,10 @@ cmp.setup {
         buffer = "[buf]",
         nvim_lsp = "[LSP]",
         nvim_lua = "[api]",
+        cmp_tabnine = "[TabNine]",
         path = "[path]",
         luasnip = "[snip]",
         gh_issues = "[issues]",
-        tn = "[TabNine]",
       },
     },
   },
