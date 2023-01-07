@@ -69,7 +69,10 @@ require('packer').startup(function(use)
   use 'lewis6991/impatient.nvim'
 
   -- Debugger
-  use 'mfussenegger/nvim-dap'
+  use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
+  use { 'theHamsta/nvim-dap-virtual-text', requires = {"mfussenegger/nvim-dap"} }
+  use 'mfussenegger/nvim-dap-python'
+
 
   -- Add custom plugins to packer from /nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
