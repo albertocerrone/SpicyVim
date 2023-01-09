@@ -84,10 +84,30 @@ _G.packer_plugins = {
     path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/LuaSnip",
     url = "https://github.com/L3MON4D3/LuaSnip"
   },
+  ["barbecue.nvim"] = {
+    loaded = true,
+    path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/barbecue.nvim",
+    url = "https://github.com/utilyre/barbecue.nvim"
+  },
+  ["cmp-buffer"] = {
+    loaded = true,
+    path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/cmp-buffer",
+    url = "https://github.com/hrsh7th/cmp-buffer"
+  },
   ["cmp-nvim-lsp"] = {
     loaded = true,
     path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp",
     url = "https://github.com/hrsh7th/cmp-nvim-lsp"
+  },
+  ["cmp-path"] = {
+    loaded = true,
+    path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/cmp-path",
+    url = "https://github.com/hrsh7th/cmp-path"
+  },
+  ["cmp-tabnine"] = {
+    loaded = true,
+    path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/cmp-tabnine",
+    url = "https://github.com/tzachar/cmp-tabnine"
   },
   cmp_luasnip = {
     loaded = true,
@@ -104,15 +124,15 @@ _G.packer_plugins = {
     path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/gitsigns.nvim",
     url = "https://github.com/lewis6991/gitsigns.nvim"
   },
-  ["impatient.nvim"] = {
-    loaded = true,
-    path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/impatient.nvim",
-    url = "https://github.com/lewis6991/impatient.nvim"
-  },
   ["indent-blankline.nvim"] = {
     loaded = true,
     path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/indent-blankline.nvim",
     url = "https://github.com/lukas-reineke/indent-blankline.nvim"
+  },
+  ["lspkind-nvim"] = {
+    loaded = true,
+    path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/lspkind-nvim",
+    url = "https://github.com/onsails/lspkind-nvim"
   },
   ["lualine.nvim"] = {
     loaded = true,
@@ -134,15 +154,45 @@ _G.packer_plugins = {
     path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/nvim-cmp",
     url = "https://github.com/hrsh7th/nvim-cmp"
   },
+  ["nvim-dap"] = {
+    loaded = true,
+    path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/nvim-dap",
+    url = "https://github.com/mfussenegger/nvim-dap"
+  },
+  ["nvim-dap-python"] = {
+    loaded = true,
+    path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/nvim-dap-python",
+    url = "https://github.com/mfussenegger/nvim-dap-python"
+  },
+  ["nvim-dap-ui"] = {
+    loaded = true,
+    path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/nvim-dap-ui",
+    url = "https://github.com/rcarriga/nvim-dap-ui"
+  },
+  ["nvim-dap-virtual-text"] = {
+    loaded = true,
+    path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/nvim-dap-virtual-text",
+    url = "https://github.com/theHamsta/nvim-dap-virtual-text"
+  },
   ["nvim-lspconfig"] = {
     loaded = true,
     path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/nvim-lspconfig",
     url = "https://github.com/neovim/nvim-lspconfig"
   },
+  ["nvim-navic"] = {
+    loaded = true,
+    path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/nvim-navic",
+    url = "https://github.com/SmiteshP/nvim-navic"
+  },
   ["nvim-treesitter"] = {
     loaded = true,
     path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
     url = "https://github.com/nvim-treesitter/nvim-treesitter"
+  },
+  ["nvim-treesitter-context"] = {
+    loaded = true,
+    path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/start/nvim-treesitter-context",
+    url = "https://github.com/nvim-treesitter/nvim-treesitter-context"
   },
   ["nvim-treesitter-textobjects"] = {
     load_after = {},
@@ -150,6 +200,12 @@ _G.packer_plugins = {
     needs_bufread = false,
     path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/opt/nvim-treesitter-textobjects",
     url = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects"
+  },
+  ["nvim-web-devicons"] = {
+    loaded = false,
+    needs_bufread = false,
+    path = "/Users/albertocerrone/.local/share/nvim/site/pack/packer/opt/nvim-web-devicons",
+    url = "https://github.com/nvim-tree/nvim-web-devicons"
   },
   ["packer.nvim"] = {
     loaded = true,

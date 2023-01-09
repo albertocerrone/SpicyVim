@@ -1,4 +1,3 @@
-pcall(require,"impatient")
 require("albertocerrone")
 
 -- The line beneath this is called `modeline`. See `:help modeline`

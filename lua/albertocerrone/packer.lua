@@ -7,9 +7,11 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   vim.cmd [[packadd packer.nvim]]
 end
 
-require('packer').startup(function(use)
+require('packer').startup({ function(use)
   -- Package manager
   use 'wbthomason/packer.nvim'
+
+  use 'folke/tokyonight.nvim' -- Tokioooooo
 
   use { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
@@ -29,7 +31,7 @@ require('packer').startup(function(use)
     requires = { 'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'L3MON4D3/LuaSnip',
       'saadparwaiz1/cmp_luasnip', },
   }
-  use {'tzachar/cmp-tabnine', run='./install.sh', requires = 'hrsh7th/nvim-cmp'}
+  use { 'tzachar/cmp-tabnine', run = './install.sh', requires = 'hrsh7th/nvim-cmp' }
   use "onsails/lspkind-nvim"
 
   use { -- Highlight, edit, and navigate code
@@ -50,10 +52,9 @@ require('packer').startup(function(use)
   use 'tpope/vim-rhubarb'
   use 'lewis6991/gitsigns.nvim'
 
-  use 'folke/tokyonight.nvim' -- Tokioooooo
   use {
     'nvim-lualine/lualine.nvim',
-    requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+    requires = { 'nvim-tree/nvim-web-devicons', opt = true }
   }
   use 'lukas-reineke/indent-blankline.nvim' -- Add indentation guides even on blank lines
   use 'numToStr/Comment.nvim' -- "gc" to comment visual regions/lines
@@ -65,15 +66,19 @@ require('packer').startup(function(use)
   -- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make', cond = vim.fn.executable 'make' == 1 }
 
-  -- Improve startup time
-  use 'lewis6991/impatient.nvim'
-
   -- Debugger
-  use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
-  use { 'theHamsta/nvim-dap-virtual-text', requires = {"mfussenegger/nvim-dap"} }
+  use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
+  use { 'theHamsta/nvim-dap-virtual-text', requires = { "mfussenegger/nvim-dap" } }
   use 'mfussenegger/nvim-dap-python'
 
-
+  -- Winbar
+  use {
+    "utilyre/barbecue.nvim",
+    requires = {
+      "SmiteshP/nvim-navic",
+    },
+  }
+  --
   -- Add custom plugins to packer from /nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
   if has_plugins then
@@ -83,7 +88,14 @@ require('packer').startup(function(use)
   if is_bootstrap then
     require('packer').sync()
   end
-end)
+end,
+  config = {
+    display = {
+      open_fn = function()
+        return require('packer.util').float({ border = 'single' })
+      end
+    }
+  } })
 
 -- When we are bootstrapping a configuration, it doesn't
 -- make sense to execute the rest of the init.lua.
