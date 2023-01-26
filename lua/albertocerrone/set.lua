@@ -37,7 +37,7 @@ vim.cmd [[colorscheme tokyonight-night]]
 vim.o.completeopt = 'menuone,noselect'
 
 -- Set scrolloff
-vim.o.scrolloff = 8
+vim.o.scrolloff = 12
 
 -- Open new split below and right
 vim.o.splitbelow = true
