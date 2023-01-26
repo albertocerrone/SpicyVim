@@ -63,4 +63,4 @@ require('dap.ext.vscode').load_launchjs()
 
 -- This is for python debugger.
 -- Need the installation of debugpy. Check https://github.com/mfussenegger/nvim-dap-python#debugpy
-require('dap-python').setup('~/.virtualenvs/debugpy/bin/python')
+require('dap-python').setup('~/.config/nvim/.virtualenvs/debugpy/bin/python')
