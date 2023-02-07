@@ -42,3 +42,6 @@ vim.o.scrolloff = 12
 -- Open new split below and right
 vim.o.splitbelow = true
 vim.o.splitright = true
+
+-- Add a colored line to make it easier to find the cursore
+vim.o.cursorline = true
