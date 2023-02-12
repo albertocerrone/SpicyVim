@@ -53,10 +53,16 @@ cmp.setup {
       end
     end, { 'i', 's' }),
   },
+
+  window = {
+    completion = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
+  },
   
   sources = {
-    { name = 'cmp_tabnine' },
     { name = 'nvim_lsp' },
+    { name = 'cmp_tabnine' },
+    { name = 'nvim_lsp_signature_help' },
     { name = 'luasnip' },
     { name = 'path' },
     { name = 'buffer' },

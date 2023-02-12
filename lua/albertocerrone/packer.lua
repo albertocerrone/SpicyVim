@@ -31,11 +31,15 @@ require('packer').startup({ function(use)
     },
   }
 
+
+  -- Adds extra functionality over rust analyzer
+  use("rust-lang/rust.vim")
+  use("simrat39/rust-tools.nvim")
+
   -- Autocompletion
   use {
     'hrsh7th/nvim-cmp',
-    requires = { 'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'L3MON4D3/LuaSnip',
-      'saadparwaiz1/cmp_luasnip', },
+    requires = { 'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-vsnip','hrsh7th/cmp-nvim-lsp-signature-help', 'hrsh7th/cmp-nvim-lua', 'hrsh7th/cmp-path', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip', },
   }
   use { 'tzachar/cmp-tabnine', run = './install.sh', requires = 'hrsh7th/nvim-cmp' }
   use "onsails/lspkind-nvim"
