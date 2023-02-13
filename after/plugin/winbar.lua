@@ -1,2 +1,0 @@
-require("barbecue").setup()
-
