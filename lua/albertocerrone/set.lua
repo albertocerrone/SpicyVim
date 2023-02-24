@@ -61,3 +61,7 @@ set_cursorline("FileType", false, "TelescopePrompt")
 
 vim.opt.shada = { "!", "'1000", "<50", "s10", "h" }
 
+-- Folding
+vim.opt.foldmethod='expr'
+vim.opt.foldexpr='nvim_treesitter#foldexpr()'
+vim.opt.foldenable=false       -- Disable folding at startup.

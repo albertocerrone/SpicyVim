@@ -1,4 +1,4 @@
-require("albertocerrone.packer")
+require("albertocerrone.lazy")
 require("albertocerrone.set")
 require("albertocerrone.keymap")
 
