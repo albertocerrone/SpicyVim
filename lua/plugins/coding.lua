@@ -26,6 +26,14 @@ return {
             { "<s-tab>", function() require("luasnip").jump( -1) end, mode = { "i", "s" } },
         },
     },
+    -- auto pairs
+    {
+        "echasnovski/mini.pairs",
+        event = "InsertEnter",
+        config = function(_, opts)
+            require("mini.pairs").setup(opts)
+        end,
+    },
     -- Autocompletion
     {
         'hrsh7th/nvim-cmp',
@@ -76,9 +84,9 @@ return {
                     documentation = cmp.config.window.bordered(),
                 },
                 sources = cmp.config.sources {
+                    { name = 'nvim_lsp_signature_help' },
                     { name = 'nvim_lsp' },
                     { name = 'cmp_tabnine' },
-                    { name = 'nvim_lsp_signature_help' },
                     { name = 'luasnip' },
                     { name = 'path' },
                     { name = 'buffer' },
