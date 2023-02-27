@@ -44,7 +44,6 @@ vim.o.splitright = true
 
 -- Cursorline highlighting control
 --  Only have it on in the active buffer
-vim.opt.cursorline = true -- Highlight the current line
 local group = vim.api.nvim_create_augroup("CursorLineControl", { clear = true })
 local set_cursorline = function(event, value, pattern)
   vim.api.nvim_create_autocmd(event, {
