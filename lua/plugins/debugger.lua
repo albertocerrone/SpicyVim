@@ -4,43 +4,64 @@ return {
     "mfussenegger/nvim-dap",
     dependencies = {
       {
+        "jay-babu/mason-nvim-dap.nvim",
+        dependencies = { "nvim-dap" },
+        cmd = { "DapInstall", "DapUninstall" },
+        opts = {
+          automatic_setup = true,
+          ensure_installed = {"python"},
+          handlers = {
+            function(config)
+              -- all sources with no handler get passed here
+
+              -- Keep original functionality
+              require('mason-nvim-dap').default_setup(config)
+            end,
+    },
+        },
+        config = function(opts)
+          local mason_nvim_dap = require "mason-nvim-dap"
+          mason_nvim_dap.setup(opts)
+        end
+      },
+      {
         "theHamsta/nvim-dap-virtual-text",
         config = true,
       },
       {
         "rcarriga/nvim-dap-ui",
         opts = {
-          icons = { expanded = "▾", collapsed = "▸" },
-          mappings = {
-            -- Use a table to apply multiple mappings
-            expand = { "<CR>", "<2-LeftMouse>" },
-            open = "o",
-            remove = "d",
-            edit = "e",
-            repl = "r",
-            toggle = "t",
-          },
-          layouts = {
-            {
-              elements = {
-                "scopes",
-                "breakpoints",
-                "stacks",
-                "watches",
-              },
-              size = 80,
-              position = "left",
-            },
-            {
-              elements = { "repl", "console" },
-              size = 0.25,
-              position = "bottom",
-            },
-          },
-          render = {
-            max_value_lines = 3,
-          },
-          floating = { max_width = 0.9, max_height = 0.5, border = vim.g.border_chars },
+          -- icons = { expanded = "▾", collapsed = "▸" },
+          -- mappings = {
+          --   -- Use a table to apply multiple mappings
+          --   expand = { "<CR>", "<2-LeftMouse>" },
+          --   open = "o",
+          --   remove = "d",
+          --   edit = "e",
+          --   repl = "r",
+          --   toggle = "t",
+          -- },
+          -- layouts = {
+          --   {
+          --     elements = {
+          --       "scopes",
+          --       "breakpoints",
+          --       "stacks",
+          --       "watches",
+          --     },
+          --     size = 80,
+          --     position = "left",
+          --   },
+          --   {
+          --     elements = { "repl", "console" },
+          --     size = 0.25,
+          --     position = "bottom",
+          --   },
+          -- },
+          -- render = {
+          --   max_value_lines = 3,
+          -- },
+          floating = { max_width = 0.9, max_height = 0.5, border = "rounded" },
         },
       },
       {
@@ -48,6 +69,7 @@ return {
         ft = { "python" },
         config = function ()
           require("dap-python").setup("~/.config/nvim/.virtualenvs/debugpy/bin/python")
+          require('dap-python').test_runner = 'pytest'
         end
       }
     },
@@ -69,11 +91,11 @@ return {
     end,
     keys = {
       {
-        "<F5>",
+        "<F2>",
         function ()
-          require("dap").continue()
+          require("dap").step_into()
         end,
-        desc = "Debug: Start/Continue"
+        desc = "Debug: Step Into"
       },
       {
         "<F3>",
@@ -83,11 +105,21 @@ return {
         desc = "Debug: Step Over"
       },
       {
-        "<F2>",
+        "<F4>",
         function ()
-          require("dap").step_into()
+          local filetype = vim.bo.filetype
+          if filetype == "python" then
+            require("dap-python").test_method()
+          end
         end,
-        desc = "Debug: Step Into"
+        desc = "Debug: Test"
+      },
+      {
+        "<F5>",
+        function ()
+          require("dap").continue()
+        end,
+        desc = "Debug: Start/Continue"
       },
       {
         "<F12>",

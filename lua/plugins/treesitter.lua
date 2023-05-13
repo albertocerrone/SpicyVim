@@ -1,5 +1,6 @@
 return {
-    { -- Highlight, edit, and navigate code
+    {
+        -- Highlight, edit, and navigate code
         'nvim-treesitter/nvim-treesitter',
         version = false, -- last release is way too old and doesn't work on Windows
         build = ":TSUpdate",
@@ -28,7 +29,7 @@ return {
             -- Automatically install missing parsers when entering buffer
             -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
             auto_install = true,
-
+            autotag = { enable = true },
             highlight = { enable = true },
             indent = { enable = true },
             context_commentstring = { enable = true, enable_autocmd = false },
@@ -86,19 +87,22 @@ return {
                 },
             },
         },
-        config = function (_, opts)
+        config = function(_, opts)
             require("nvim-treesitter.configs").setup(opts)
         end,
         dependencies = {
+            "windwp/nvim-ts-autotag",
+            "JoosepAlviste/nvim-ts-context-commentstring",
             'nvim-treesitter/nvim-treesitter-textobjects',
             {
                 'nvim-treesitter/nvim-treesitter-context',
                 opts = {
-                    enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
-                    max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
-                    trim_scope = 'outer', -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+                    enable = true,         -- Enable this plugin (Can be enabled/disabled later via commands)
+                    max_lines = 0,         -- How many lines the window should span. Values <= 0 mean no limit.
+                    trim_scope = 'outer',  -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
                     min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
-                    patterns = { -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
+                    patterns = {
+                        -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
                         -- For all filetypes
                         -- Note that setting an entry here replaces all other patterns for this entry.
                         -- By setting the 'default' entry below, you can control which nodes you want to
@@ -172,11 +176,10 @@ return {
                         -- exactly match "impl_item" only)
                         -- rust = true,
                     },
-
                     -- [!] The options below are exposed but shouldn't require your attention,
                     --     you can safely ignore them.
 
-                    zindex = 20, -- The Z-index of the context window
+                    zindex = 20,     -- The Z-index of the context window
                     mode = 'cursor', -- Line used to calculate context. Choices: 'cursor', 'topline'
                     -- Separator between context and content. Should be a single character string, like '-'.
                     -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.

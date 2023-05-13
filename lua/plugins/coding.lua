@@ -1,14 +1,33 @@
 -- local tabnine = require('cmp_tabnine.config')
 return {
+    {
+        'github/copilot.vim',
+        event = 'InsertEnter',
+        init = function()
+            vim.g.copilot_no_tab_map = true
+            vim.g.copilot_assume_mapped = true
+            vim.cmd('imap <silent><script><expr> <C-a> copilot#Accept("\\<CR>")')
+        end,
+    },
+    -- auto pairs
+    {
+        "echasnovski/mini.pairs",
+        event = "InsertEnter",
+        config = function(_, opts)
+            require("mini.pairs").setup(opts)
+        end,
+    },
     -- snippets
     {
         'L3MON4D3/LuaSnip',
         dependencies = {
             'rafamadriz/friendly-snippets',
-            config = function()
-                require('luasnip.loaders.from_vscode').lazy_load()
-            end,
         },
+        config = function(_, opts)
+            if opts then require("luasnip").config.setup(opts) end
+            vim.tbl_map(function(type) require("luasnip.loaders.from_" .. type).lazy_load() end,
+                { "vscode", "snipmate", "lua" })
+        end,
         opts = {
             history = true,
             delete_check_events = 'TextChanged',
@@ -20,19 +39,13 @@ return {
                 function()
                     return require("luasnip").jumpable(1) and "<Plug>luasnip-jump-next" or "<tab>"
                 end,
-                expr = true, silent = true, mode = "i",
+                expr = true,
+                silent = true,
+                mode = "i",
             },
-            { "<tab>",   function() require("luasnip").jump(1) end,  mode = "s" },
-            { "<s-tab>", function() require("luasnip").jump( -1) end, mode = { "i", "s" } },
+            { "<tab>",   function() require("luasnip").jump(1) end,   mode = "s" },
+            { "<s-tab>", function() require("luasnip").jump(-1) end,  mode = { "i", "s" } },
         },
-    },
-    -- auto pairs
-    {
-        "echasnovski/mini.pairs",
-        event = "InsertEnter",
-        config = function(_, opts)
-            require("mini.pairs").setup(opts)
-        end,
     },
     -- Autocompletion
     {
@@ -41,9 +54,44 @@ return {
         opts = function()
             local cmp = require 'cmp'
             local luasnip = require 'luasnip'
-            local lspkind = require 'lspkind'
+            local lspkind_status_ok, lspkind = pcall(require, "lspkind")
 
+            local border_opts = {
+                border = "single",
+                winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
+            }
+            local function has_words_before()
+                local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+                return col ~= 0 and
+                vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match "%s" == nil
+            end
             return {
+                preselect = cmp.PreselectMode.None,
+                formatting = {
+                    fields = { "kind", "abbr", "menu" },
+                    format = lspkind.cmp_format({
+                        mode = "symbol",
+                        symbol_map = {
+                            Array = "",
+                            Boolean = "⊨",
+                            Class = "",
+                            Constructor = "",
+                            Key = "",
+                            Namespace = "",
+                            Null = "NULL",
+                            Number = "#",
+                            Object = "",
+                            Package = "",
+                            Property = "",
+                            Reference = "",
+                            Snippet = "",
+                            String = "",
+                            TypeParameter = "",
+                            Unit = "",
+                        },
+
+                    }),
+                },
                 completion = {
                     completeopt = 'menu,menuone,noinsert',
                 },
@@ -53,89 +101,83 @@ return {
                     end,
                 },
                 mapping = cmp.mapping.preset.insert {
-                    ['<C-f>'] = cmp.mapping.scroll_docs( -4),
+                    ['<C-f>'] = cmp.mapping.scroll_docs(-4),
                     ['<C-d>'] = cmp.mapping.scroll_docs(4),
                     ['<C-Tab>'] = cmp.mapping.complete(),
                     ['<CR>'] = cmp.mapping.confirm {
                         behavior = cmp.ConfirmBehavior.Replace,
                         select = true,
                     },
-                    ['<Tab>'] = cmp.mapping(function(fallback)
+                    ["<Tab>"] = cmp.mapping(function(fallback)
                         if cmp.visible() then
                             cmp.select_next_item()
                         elseif luasnip.expand_or_jumpable() then
                             luasnip.expand_or_jump()
+                        elseif has_words_before() then
+                            cmp.complete()
                         else
                             fallback()
                         end
-                    end, { 'i', 's' }),
+                    end, { "i", "s" }),
                     ['<S-Tab>'] = cmp.mapping(function(fallback)
                         if cmp.visible() then
                             cmp.select_prev_item()
-                        elseif luasnip.jumpable( -1) then
-                            luasnip.jump( -1)
+                        elseif luasnip.jumpable(-1) then
+                            luasnip.jump(-1)
                         else
                             fallback()
                         end
                     end, { 'i', 's' }),
                 },
                 window = {
-                    completion = cmp.config.window.bordered(),
-                    documentation = cmp.config.window.bordered(),
+                    completion = cmp.config.window.bordered(border_opts),
+                    documentation = cmp.config.window.bordered(border_opts),
                 },
                 sources = cmp.config.sources {
                     { name = 'nvim_lsp_signature_help' },
                     { name = 'nvim_lsp' },
-                    { name = 'cmp_tabnine' },
+                    -- { name = 'cmp_tabnine' },
                     { name = 'luasnip' },
                     { name = 'path' },
                     { name = 'buffer' },
                 },
-                formatting = {
-                    -- Set up nice formatting for your sources.
-                    format = lspkind.cmp_format {
-                        with_text = true,
-                        menu = {
-                            buffer = '[buf]',
-                            nvim_lsp = '[LSP]',
-                            nvim_lua = '[api]',
-                            cmp_tabnine = '[TabNine]',
-                            path = '[path]',
-                            luasnip = '[snip]',
-                            gh_issues = '[issues]',
-                        },
-                    },
-                },
                 experimental = {
-                    ghost_text = true,
+                    ghost_text = false,
                 },
             }
         end,
         dependencies = {
-            {'hrsh7th/cmp-buffer'},
-            {'hrsh7th/cmp-vsnip'},
-            {'hrsh7th/cmp-nvim-lsp-signature-help'},
-            {'hrsh7th/cmp-nvim-lua'},
-            {'hrsh7th/cmp-path'},
-            {'onsails/lspkind-nvim'},
-            {'saadparwaiz1/cmp_luasnip'},
+            { 'hrsh7th/cmp-buffer' },
+            { 'hrsh7th/cmp-nvim-lsp-signature-help' },
+            { 'hrsh7th/cmp-nvim-lua' },
+            { 'hrsh7th/cmp-path' },
             {
-                'tzachar/cmp-tabnine',
-                build = './install.sh',
+                'onsails/lspkind-nvim',
                 opts = {
-                    max_lines = 1000,
-                    max_num_results = 20,
-                    sort = true,
-                    run_on_every_keystroke = true,
-                    snippet_placeholder = '..',
-                    ignored_file_types = {
-                        -- default is not to ignore
-                        -- uncomment to ignore in lua:
-                        -- lua = true
-                    },
-                    show_prediction_strength = false,
                 },
+                config = function(_, opts)
+                    if opts then require("lspkind").init(opts) end
+                end
             },
+            { 'hrsh7th/cmp-nvim-lsp' },
+            { 'saadparwaiz1/cmp_luasnip' },
+            -- {
+            --     'tzachar/cmp-tabnine',
+            --     build = './install.sh',
+            --     opts = {
+            --         max_lines = 1000,
+            --         max_num_results = 20,
+            --         sort = true,
+            --         run_on_every_keystroke = true,
+            --         snippet_placeholder = '..',
+            --         ignored_file_types = {
+            --             -- default is not to ignore
+            --             -- uncomment to ignore in lua:
+            --             -- lua = true
+            --         },
+            --         show_prediction_strength = false,
+            --     },
+            -- },
         },
     },
 }

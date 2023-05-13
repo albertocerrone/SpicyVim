@@ -5,6 +5,9 @@
 vim.o.nu = true
 vim.o.relativenumber = true
 
+-- Go to prev/next line if at the end of the line
+vim.o.whichwrap = 'b,s,<,>,h,l,[,]'
+
 -- Set highlight on search
 vim.o.hlsearch = false
 

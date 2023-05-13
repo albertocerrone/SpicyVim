@@ -20,3 +20,7 @@ vim.keymap.set('n', '<leader>-e', vim.diagnostic.goto_prev, { desc = 'Diagnostic
 vim.keymap.set('n', '<leader>+e', vim.diagnostic.goto_next, { desc = 'Diagnostic: go to next' })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Diagnostic: show [e]rror' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Diagnostic: Add buffer to the location list' })
+
+-- Visual shiftings
+vim.keymap.set('v', '<', '<gv')
+vim.keymap.set('v', '>', '>gv')

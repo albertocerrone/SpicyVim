@@ -1,6 +1,7 @@
 require("albertocerrone.lazy")
 require("albertocerrone.set")
 require("albertocerrone.keymap")
+require("albertocerrone.util")
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
