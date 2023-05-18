@@ -1,4 +1,91 @@
 return {
+  {
+    "nvim-neotest/neotest",
+    opts = function()
+      return {
+        adapters = {
+          require("neotest-python")({
+            dap = {
+              justMyCode = false,
+              -- console = "integratedTerminal",
+            },
+            pytest_discovery = true,
+            args = { "--log-level", "DEBUG", "--quiet" },
+            runner = "pytest",
+          })
+        }}
+    end,
+    keys = function ()
+      -- local lib = require("neotest.lib")
+      local get_env = function()
+        local env = {}
+        local file = ".env"
+        -- if not lib.files.exists(file) then
+        --   return {}
+        -- end
+
+        for _, line in ipairs(vim.fn.readfile(file)) do
+          for name, value in string.gmatch(line, "(%S+)=['\"]?(.*)['\"]?") do
+            local str_end = string.sub(value, -1, -1)
+            if str_end == "'" or str_end == '"' then
+              value = string.sub(value, 1, -2)
+            end
+
+            env[name] = value
+          end
+        end
+        return env
+      end
+      
+      return {
+        {
+          "<leader>dm",
+          function()
+            require("neotest").run.run({env = get_env()})
+          end,
+          desc = "Test: Run Method"
+        },
+        {
+          "<leader>dM",
+          function()
+            require("neotest").run.run({strategy = 'dap', env = get_env()})
+          end,
+          desc = "Test: Debug Test Method"
+        },
+        {
+          "<leader>df",
+          function()
+            require("neotest").run.run({vim.fn.expand('%'), env = get_env()})
+          end,
+          desc = "Test: Run File"
+        },
+        {
+          "<leader>dF",
+          function()
+            require("neotest").run.run({vim.fn.expand('%'),strategy = 'dap', env = get_env()})
+          end,
+          desc = "Test: Debug Test File"
+        },
+        {
+          "<leader>dS",
+          function()
+            require("neotest").summary.toggle()
+          end,
+          desc = "Test: Summary"
+        },
+      }
+    end,
+    config = function(opts)
+      local neotest = require("neotest")
+      neotest.setup(opts)
+    end,
+    dependencies = {
+      {
+        "nvim-neotest/neotest-python",
+        ft = { "python" },
+      },
+    }
+  },
   -- Debugger
   {
     "mfussenegger/nvim-dap",
@@ -9,7 +96,7 @@ return {
         cmd = { "DapInstall", "DapUninstall" },
         opts = {
           automatic_setup = true,
-          ensure_installed = {"python"},
+          ensure_installed = { "python" },
           handlers = {
             function(config)
               -- all sources with no handler get passed here
@@ -17,7 +104,7 @@ return {
               -- Keep original functionality
               require('mason-nvim-dap').default_setup(config)
             end,
-    },
+          },
         },
         config = function(opts)
           local mason_nvim_dap = require "mason-nvim-dap"
@@ -67,13 +154,13 @@ return {
       {
         "mfussenegger/nvim-dap-python",
         ft = { "python" },
-        config = function ()
+        config = function()
           require("dap-python").setup("~/.config/nvim/.virtualenvs/debugpy/bin/python")
           require('dap-python').test_runner = 'pytest'
         end
       }
     },
-    config = function ()
+    config = function()
       local dap = require("dap")
       local dapui = require("dapui")
 
@@ -92,21 +179,21 @@ return {
     keys = {
       {
         "<F2>",
-        function ()
+        function()
           require("dap").step_into()
         end,
         desc = "Debug: Step Into"
       },
       {
         "<F3>",
-        function ()
+        function()
           require("dap").step_over()
         end,
         desc = "Debug: Step Over"
       },
       {
         "<F4>",
-        function ()
+        function()
           local filetype = vim.bo.filetype
           if filetype == "python" then
             require("dap-python").test_method()
@@ -116,28 +203,28 @@ return {
       },
       {
         "<F5>",
-        function ()
+        function()
           require("dap").continue()
         end,
         desc = "Debug: Start/Continue"
       },
       {
         "<F12>",
-        function ()
+        function()
           require("dap").step_out()
         end,
         desc = "Debug: Step Out"
       },
       {
         "<leader>b",
-        function ()
+        function()
           require("dap").toggle_breakpoint()
         end,
         desc = "Debug: Toggle Breakpoint"
       },
       {
         "<leader>B",
-        function ()
+        function()
           require("dap").set_breakpoint(
             vim.fn.input("Breakpoint condition: ")
           )
@@ -146,16 +233,16 @@ return {
       },
       {
         "<leader>lp",
-        function ()
+        function()
           require("dap").set_breakpoint(
-            nil,nil,vim.fn.input("Log point message: ")
+            nil, nil, vim.fn.input("Log point message: ")
           )
         end,
         desc = "Debug: Log point message"
       },
       {
         "<leader>dr",
-        function ()
+        function()
           require("dap").repl.open()
         end,
         desc = "Debug: Open REPL"
@@ -163,5 +250,4 @@ return {
 
     },
   },
-
 }
