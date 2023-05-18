@@ -93,10 +93,11 @@ return {
 				return data
 			end
 
+
 			return {
 				options = {
 					icons_enabled = true,
-					theme = 'ayu_mirage',
+					theme = 'auto',
 					component_separators = { left = '|', right = '|' },
 					-- section_separators = { left = '', right = '' },
 					disabled_filetypes = {
@@ -113,9 +114,9 @@ return {
 					}
 				},
 				sections = {
-					lualine_a = { 'mode' },
+					lualine_a = { {'mode', color={ gui = "bold"}} },
 					lualine_b = { custom_fname },
-					lualine_c = { 'branch', 'diff', 'diagnostics' },
+					lualine_c = { {'branch', icon = {' ', align='right', color={fg='orange'}}}, {'diff', symbols = {added=" " , modified=" ",removed=" "}}, 'diagnostics' },
 					lualine_x = { 'encoding', 'fileformat', 'filetype' },
 					lualine_y = { 'progress' },
 					lualine_z = { 'location' }
@@ -131,7 +132,7 @@ return {
 				tabline = {},
 				winbar = {},
 				inactive_winbar = {},
-				extensions = {}
+				extensions = {'lazy'}
 			}
 		end
 	},
