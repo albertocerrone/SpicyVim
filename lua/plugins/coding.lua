@@ -11,11 +11,21 @@ return {
     },
     -- auto pairs
     {
-        "echasnovski/mini.pairs",
+        "windwp/nvim-autopairs",
         event = "InsertEnter",
-        config = function(_, opts)
-            require("mini.pairs").setup(opts)
+        config = function()
+            require("nvim-autopairs").setup {
+                ---@usage check treesitter
+                check_ts = true,
+                ts_config = {
+                    lua = { "string", "source" },
+                    javascript = { "string", "template_string" },
+                    java = false,
+                },
+                disable_filetype = { "TelescopePrompt", "spectre_panel" },
+            }
         end,
+        dependencies = { "nvim-treesitter/nvim-treesitter", "hrsh7th/nvim-cmp" },
     },
     -- snippets
     {
