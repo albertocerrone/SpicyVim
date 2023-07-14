@@ -223,6 +223,13 @@ return {
         desc = "Debug: Start/Continue"
       },
       {
+        "<F7>",
+        function()
+          require("dap").toggle()
+        end,
+        desc = "Debug: See last session result"
+      },
+      {
         "<F12>",
         function()
           require("dap").step_out()
