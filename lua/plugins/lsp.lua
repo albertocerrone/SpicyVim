@@ -206,7 +206,7 @@ return {
 
 
             -- Useful status updates for LSP
-            { 'j-hui/fidget.nvim', opts = { text = { spinner = "moon", done = "✅ "}} , config = true }
+            { 'j-hui/fidget.nvim', tag="legacy", opts = { text = { spinner = "moon", done = "✅ "}} , config = true }
         },
     },
     {
