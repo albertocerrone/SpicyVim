@@ -88,24 +88,23 @@ return {
 			function custom_fname:update_status()
 				local data = custom_fname.super.update_status(self)
 				data = highlight.component_format_highlight(vim.bo.modified
-					    and self.status_colors.modified
-					    or self.status_colors.saved) .. data
+					and self.status_colors.modified
+					or self.status_colors.saved) .. data
 				return data
 			end
-
 
 			return {
 				options = {
 					icons_enabled = true,
 					theme = 'auto',
-					component_separators = { left = '|', right = '|' },
+					component_separators = { left = '', right = '' },
 					-- section_separators = { left = '', right = '' },
 					disabled_filetypes = {
 						statusline = {},
 						winbar = {},
 					},
 					ignore_focus = {},
-					always_divide_middle = true,
+					always_divide_middle = false,
 					globalstatus = false,
 					refresh = {
 						statusline = 1000,
@@ -114,9 +113,19 @@ return {
 					}
 				},
 				sections = {
-					lualine_a = { {'mode', color={ gui = "bold"}} },
-					lualine_b = { custom_fname },
-					lualine_c = { {'branch', icon = {' ', align='right', color={fg='orange'}}}, {'diff', symbols = {added=" " , modified=" ",removed=" "}}, 'diagnostics' },
+					lualine_a = { { 'mode', color = { gui = "bold" } } },
+					lualine_b = {
+						{ custom_fname,
+							symbols = { modified = "  ", readonly = "", unnamed = "" } } },
+					lualine_c = {
+						{ 'branch',      icon = { ' ', align = 'right', color = { fg =
+						'orange' } } },
+						{ 'diff',        symbols = { added = " ", modified = " ",
+							removed = " " } },
+						{ 'diagnostics',
+							                 symbols = { Error = " ", Warn = " ",
+								Hint = " ", Info = " " } },
+					},
 					lualine_x = { 'encoding', 'fileformat', 'filetype' },
 					lualine_y = { 'progress' },
 					lualine_z = { 'location' }
@@ -132,7 +141,7 @@ return {
 				tabline = {},
 				winbar = {},
 				inactive_winbar = {},
-				extensions = {'lazy'}
+				extensions = { 'lazy' }
 			}
 		end
 	},

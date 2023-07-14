@@ -1,68 +1,33 @@
 return {
   {
     "nvim-neotest/neotest",
-    opts = function()
-      return {
-        adapters = {
-          require("neotest-python")({
-            dap = {
-              justMyCode = false,
-              -- console = "integratedTerminal",
-            },
-            pytest_discovery = true,
-            args = { "--log-level", "DEBUG", "--quiet" },
-            runner = "pytest",
-          })
-        }}
-    end,
     keys = function ()
-      -- local lib = require("neotest.lib")
-      local get_env = function()
-        local env = {}
-        local file = ".env"
-        -- if not lib.files.exists(file) then
-        --   return {}
-        -- end
-
-        for _, line in ipairs(vim.fn.readfile(file)) do
-          for name, value in string.gmatch(line, "(%S+)=['\"]?(.*)['\"]?") do
-            local str_end = string.sub(value, -1, -1)
-            if str_end == "'" or str_end == '"' then
-              value = string.sub(value, 1, -2)
-            end
-
-            env[name] = value
-          end
-        end
-        return env
-      end
-      
       return {
         {
           "<leader>dm",
           function()
-            require("neotest").run.run({env = get_env()})
+            require("neotest").run.run()
           end,
           desc = "Test: Run Method"
         },
         {
           "<leader>dM",
           function()
-            require("neotest").run.run({strategy = 'dap', env = get_env()})
+            require("neotest").run.run({strategy = 'dap'})
           end,
           desc = "Test: Debug Test Method"
         },
         {
           "<leader>df",
           function()
-            require("neotest").run.run({vim.fn.expand('%'), env = get_env()})
+            require("neotest").run.run({vim.fn.expand('%')})
           end,
           desc = "Test: Run File"
         },
         {
           "<leader>dF",
           function()
-            require("neotest").run.run({vim.fn.expand('%'),strategy = 'dap', env = get_env()})
+            require("neotest").run.run({vim.fn.expand('%'),strategy = 'dap'})
           end,
           desc = "Test: Debug Test File"
         },
@@ -76,14 +41,54 @@ return {
       }
     end,
     config = function(opts)
+      local group = vim.api.nvim_create_augroup("NeotestConfig", {})
+      for _, ft in ipairs({ "output", "attach", "summary" }) do
+        vim.api.nvim_create_autocmd("FileType", {
+          pattern = "neotest-" .. ft,
+          group = group,
+          callback = function(opts)
+            vim.keymap.set("n", "q", function()
+              pcall(vim.api.nvim_win_close, 0, true)
+            end, {
+                buffer = opts.buf,
+              })
+          end,
+        })
+      end
+
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "neotest-output-panel",
+        group = group,
+        callback = function()
+          vim.cmd("norm G")
+        end,
+      })
       local neotest = require("neotest")
-      neotest.setup(opts)
+      neotest.setup(
+        {
+          quickfix = {
+            enabled = false,
+          },
+          adapters = {
+            require("neotest-python")({
+              dap = {
+                justMyCode = false,
+                console = "integratedTerminal",
+              },
+              pytest_discovery = true,
+              args = { "--log-level", "DEBUG", "--quiet" },
+              runner = "pytest",
+            })
+          }
+        }
+      )
     end,
     dependencies = {
       {
         "nvim-neotest/neotest-python",
         ft = { "python" },
       },
+      "antoinemadec/FixCursorHold.nvim"
     }
   },
   -- Debugger
@@ -157,6 +162,15 @@ return {
         config = function()
           require("dap-python").setup("~/.config/nvim/.virtualenvs/debugpy/bin/python")
           require('dap-python').test_runner = 'pytest'
+          -- local python_path = io.popen('which python')
+          --
+          -- python_path = python_path:read("*all")
+          -- python_path = string.gsub(python_path, "^(.-)%s*\n*$", "%1")
+          -- require('dap-python').setup(python_path)
+          -- local configurations = require('dap').configurations.python
+          -- for _, configuration in pairs(configurations) do
+          --   configuration.justMyCode = false
+          -- end
         end
       }
     },

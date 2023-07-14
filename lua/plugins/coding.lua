@@ -4,6 +4,10 @@ return {
         'github/copilot.vim',
         event = 'InsertEnter',
         init = function()
+            vim.g.copilot_filetypes = {
+                ["chatgpt"] = false,
+                ["dap-repl"] = false,
+            }
             vim.g.copilot_no_tab_map = true
             vim.g.copilot_assume_mapped = true
             vim.cmd('imap <silent><script><expr> <C-a> copilot#Accept("\\<CR>")')
@@ -169,6 +173,19 @@ return {
                     { name = 'luasnip' },
                     { name = 'path' },
                     { name = 'buffer' },
+                    {
+                        name = "html-css",
+                        option = {
+                            file_types = {
+                                "html",
+                                "htmldjango",
+                            },
+                            -- css_file_types = {},
+                            style_sheets = {
+                                "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css",
+                            },
+                        },
+                    },
                 },
                 experimental = {
                     ghost_text = false,
@@ -190,6 +207,12 @@ return {
             },
             { 'hrsh7th/cmp-nvim-lsp' },
             { 'saadparwaiz1/cmp_luasnip' },
+            {
+                "Jezda1337/nvim-html-css",
+                init = function()
+                    require("html-css"):setup()
+                end,
+            },
             -- {
             --     'tzachar/cmp-tabnine',
             --     build = './install.sh',

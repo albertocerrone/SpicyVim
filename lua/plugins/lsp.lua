@@ -38,10 +38,6 @@ local on_attach = function(_, bufnr)
         print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
     end, "[W]orkspace [L]ist Folders")
 
-    -- Create a command `:Format` local to the LSP buffer
-    vim.api.nvim_buf_create_user_command(bufnr, "Format", function(_)
-        vim.lsp.buf.format()
-    end, { desc = "Format current buffer with LSP" })
 end
 
 return {
@@ -119,7 +115,12 @@ return {
                 virtual_text = { prefix = "●"},
             },
             -- diagnostics signs
-            signs = { Error = "", Warn = "", Hint = "", Info = "" },
+            signs = { 
+                Error = " ",
+                Warn = " ",
+                Hint = " ",
+                Info = " ",
+            },
             servers = {
                 -- clangd = {},
                 -- gopls = {},
@@ -194,15 +195,18 @@ return {
             'williamboman/mason-lspconfig.nvim',
 
             -- Manage global and project-local settings.
-            { 'folke/neoconf.nvim',  cmd = 'Neoconf',                                config = true },
+            { 'folke/neoconf.nvim',  cmd = 'Neoconf', config = true },
             -- Additional lua configuration, makes nvim stuff amazing
-            { "folke/neodev.nvim",   opts = { experimental = { pathStrict = true } } },
+            { "folke/neodev.nvim",   opts = { 
+                experimental = { pathStrict = true },
+                library = { plugins = { "neotest" }, types = true },
+            }},
 
             { 'hrsh7th/cmp-nvim-lsp' },
 
 
             -- Useful status updates for LSP
-            { 'j-hui/fidget.nvim',   config = true }
+            { 'j-hui/fidget.nvim', opts = { text = { spinner = "moon", done = "✅ "}} , config = true }
         },
     },
     {
@@ -216,7 +220,9 @@ return {
                     nls.builtins.code_actions.gitsigns,
                     nls.builtins.formatting.black,
                     nls.builtins.formatting.prettier.with({
-                        prefer_local = "node_modules/.bin",
+                        filetypes = {
+                            "javascript","css","scss","html","json","yaml","markdown","graphql","md","txt",
+                        },
                     }),
                     -- nls.builtins.formatting.eslint.with({
                     --     prefer_local = "node_modules/.bin",
