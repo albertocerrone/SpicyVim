@@ -1,7 +1,7 @@
-require("albertocerrone.lazy")
-require("albertocerrone.set")
-require("albertocerrone.keymap")
-require("albertocerrone.util")
+require 'albertocerrone.lazy'
+require 'albertocerrone.set'
+require 'albertocerrone.keymap'
+require 'albertocerrone.util'
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -14,9 +14,9 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
 })
 -- Create a command `:Format` local to the LSP buffer
-vim.api.nvim_create_user_command("Format", function(_)
-    vim.lsp.buf.format()
-end, { desc = "Format current buffer with LSP" })
+vim.api.nvim_create_user_command('Format', function(_)
+  vim.lsp.buf.format()
+end, { desc = 'Format current buffer with LSP' })
 
 -- Automatically resize buffers
-vim.api.nvim_command('autocmd VimResized * wincmd =')
+vim.api.nvim_command 'autocmd VimResized * wincmd ='

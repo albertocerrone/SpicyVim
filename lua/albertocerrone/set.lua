@@ -22,7 +22,7 @@ vim.o.breakindent = true
 
 -- Save undo history
 vim.o.undofile = true
-vim.o.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.o.undodir = os.getenv 'HOME' .. '/.vim/undodir'
 
 -- Case insensitive searching UNLESS /C or capital in search
 vim.o.ignorecase = true
@@ -47,7 +47,7 @@ vim.o.splitright = true
 
 -- Cursorline highlighting control
 --  Only have it on in the active buffer
-local group = vim.api.nvim_create_augroup("CursorLineControl", { clear = true })
+local group = vim.api.nvim_create_augroup('CursorLineControl', { clear = true })
 local set_cursorline = function(event, value, pattern)
   vim.api.nvim_create_autocmd(event, {
     group = group,
@@ -57,13 +57,13 @@ local set_cursorline = function(event, value, pattern)
     end,
   })
 end
-set_cursorline("WinLeave", false)
-set_cursorline("WinEnter", true)
-set_cursorline("FileType", false, "TelescopePrompt")
+set_cursorline('WinLeave', false)
+set_cursorline('WinEnter', true)
+set_cursorline('FileType', false, 'TelescopePrompt')
 
-vim.opt.shada = { "!", "'1000", "<50", "s10", "h" }
+vim.opt.shada = { '!', "'1000", '<50', 's10', 'h' }
 
 -- Folding
-vim.opt.foldmethod='expr'
-vim.opt.foldexpr='nvim_treesitter#foldexpr()'
-vim.opt.foldenable=false       -- Disable folding at startup.
+vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.opt.foldenable = false -- Disable folding at startup.

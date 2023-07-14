@@ -1,107 +1,105 @@
 return {
   {
-    "nvim-neotest/neotest",
-    keys = function ()
+    'nvim-neotest/neotest',
+    keys = function()
       return {
         {
-          "<leader>dm",
+          '<leader>dm',
           function()
-            require("neotest").run.run()
+            require('neotest').run.run()
           end,
-          desc = "Test: Run Method"
+          desc = 'Test: Run Method',
         },
         {
-          "<leader>dM",
+          '<leader>dM',
           function()
-            require("neotest").run.run({strategy = 'dap'})
+            require('neotest').run.run { strategy = 'dap' }
           end,
-          desc = "Test: Debug Test Method"
+          desc = 'Test: Debug Test Method',
         },
         {
-          "<leader>df",
+          '<leader>df',
           function()
-            require("neotest").run.run({vim.fn.expand('%')})
+            require('neotest').run.run { vim.fn.expand '%' }
           end,
-          desc = "Test: Run File"
+          desc = 'Test: Run File',
         },
         {
-          "<leader>dF",
+          '<leader>dF',
           function()
-            require("neotest").run.run({vim.fn.expand('%'),strategy = 'dap'})
+            require('neotest').run.run { vim.fn.expand '%', strategy = 'dap' }
           end,
-          desc = "Test: Debug Test File"
+          desc = 'Test: Debug Test File',
         },
         {
-          "<leader>dS",
+          '<leader>dS',
           function()
-            require("neotest").summary.toggle()
+            require('neotest').summary.toggle()
           end,
-          desc = "Test: Summary"
+          desc = 'Test: Summary',
         },
       }
     end,
     config = function(opts)
-      local group = vim.api.nvim_create_augroup("NeotestConfig", {})
-      for _, ft in ipairs({ "output", "attach", "summary" }) do
-        vim.api.nvim_create_autocmd("FileType", {
-          pattern = "neotest-" .. ft,
+      local group = vim.api.nvim_create_augroup('NeotestConfig', {})
+      for _, ft in ipairs { 'output', 'attach', 'summary' } do
+        vim.api.nvim_create_autocmd('FileType', {
+          pattern = 'neotest-' .. ft,
           group = group,
           callback = function(opts)
-            vim.keymap.set("n", "q", function()
+            vim.keymap.set('n', 'q', function()
               pcall(vim.api.nvim_win_close, 0, true)
             end, {
-                buffer = opts.buf,
-              })
+              buffer = opts.buf,
+            })
           end,
         })
       end
 
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = "neotest-output-panel",
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = 'neotest-output-panel',
         group = group,
         callback = function()
-          vim.cmd("norm G")
+          vim.cmd 'norm G'
         end,
       })
-      local neotest = require("neotest")
-      neotest.setup(
-        {
-          quickfix = {
-            enabled = false,
+      local neotest = require 'neotest'
+      neotest.setup {
+        quickfix = {
+          enabled = false,
+        },
+        adapters = {
+          require 'neotest-python' {
+            dap = {
+              justMyCode = false,
+              console = 'integratedTerminal',
+            },
+            pytest_discovery = true,
+            args = { '--log-level', 'DEBUG', '--quiet' },
+            runner = 'pytest',
           },
-          adapters = {
-            require("neotest-python")({
-              dap = {
-                justMyCode = false,
-                console = "integratedTerminal",
-              },
-              pytest_discovery = true,
-              args = { "--log-level", "DEBUG", "--quiet" },
-              runner = "pytest",
-            })
-          }
-        }
-      )
+        },
+      }
     end,
     dependencies = {
       {
-        "nvim-neotest/neotest-python",
-        ft = { "python" },
+        'nvim-neotest/neotest-python',
+        ft = { 'python' },
       },
-      "antoinemadec/FixCursorHold.nvim"
-    }
+      'antoinemadec/FixCursorHold.nvim',
+    },
   },
   -- Debugger
   {
-    "mfussenegger/nvim-dap",
+    'mfussenegger/nvim-dap',
     dependencies = {
       {
-        "jay-babu/mason-nvim-dap.nvim",
-        dependencies = { "nvim-dap" },
-        cmd = { "DapInstall", "DapUninstall" },
+        'jay-babu/mason-nvim-dap.nvim',
+        dependencies = { 'nvim-dap' },
+        cmd = { 'DapInstall', 'DapUninstall' },
         opts = {
           automatic_setup = true,
-          ensure_installed = { "python" },
+          ensure_installed = { 'python' },
           handlers = {
             function(config)
               -- all sources with no handler get passed here
@@ -112,16 +110,16 @@ return {
           },
         },
         config = function(opts)
-          local mason_nvim_dap = require "mason-nvim-dap"
+          local mason_nvim_dap = require 'mason-nvim-dap'
           mason_nvim_dap.setup(opts)
-        end
+        end,
       },
       {
-        "theHamsta/nvim-dap-virtual-text",
+        'theHamsta/nvim-dap-virtual-text',
         config = true,
       },
       {
-        "rcarriga/nvim-dap-ui",
+        'rcarriga/nvim-dap-ui',
         opts = {
           -- icons = { expanded = "▾", collapsed = "▸" },
           -- mappings = {
@@ -153,14 +151,14 @@ return {
           -- render = {
           --   max_value_lines = 3,
           -- },
-          floating = { max_width = 0.9, max_height = 0.5, border = "rounded" },
+          floating = { max_width = 0.9, max_height = 0.5, border = 'rounded' },
         },
       },
       {
-        "mfussenegger/nvim-dap-python",
-        ft = { "python" },
+        'mfussenegger/nvim-dap-python',
+        ft = { 'python' },
         config = function()
-          require("dap-python").setup("~/.config/nvim/.virtualenvs/debugpy/bin/python")
+          require('dap-python').setup '~/.config/nvim/.virtualenvs/debugpy/bin/python'
           require('dap-python').test_runner = 'pytest'
           -- local python_path = io.popen('which python')
           --
@@ -171,20 +169,20 @@ return {
           -- for _, configuration in pairs(configurations) do
           --   configuration.justMyCode = false
           -- end
-        end
-      }
+        end,
+      },
     },
     config = function()
-      local dap = require("dap")
-      local dapui = require("dapui")
+      local dap = require 'dap'
+      local dapui = require 'dapui'
 
-      dap.listeners.after.event_initialized["dapui_config"] = function()
+      dap.listeners.after.event_initialized['dapui_config'] = function()
         dapui.open()
       end
-      dap.listeners.before.event_terminated["dapui_config"] = function()
+      dap.listeners.before.event_terminated['dapui_config'] = function()
         dapui.close()
       end
-      dap.listeners.before.event_exited["dapui_config"] = function()
+      dap.listeners.before.event_exited['dapui_config'] = function()
         dapui.close()
       end
 
@@ -192,83 +190,78 @@ return {
     end,
     keys = {
       {
-        "<F2>",
+        '<F2>',
         function()
-          require("dap").step_into()
+          require('dap').step_into()
         end,
-        desc = "Debug: Step Into"
+        desc = 'Debug: Step Into',
       },
       {
-        "<F3>",
+        '<F3>',
         function()
-          require("dap").step_over()
+          require('dap').step_over()
         end,
-        desc = "Debug: Step Over"
+        desc = 'Debug: Step Over',
       },
       {
-        "<F4>",
+        '<F4>',
         function()
           local filetype = vim.bo.filetype
-          if filetype == "python" then
-            require("dap-python").test_method()
+          if filetype == 'python' then
+            require('dap-python').test_method()
           end
         end,
-        desc = "Debug: Test"
+        desc = 'Debug: Test',
       },
       {
-        "<F5>",
+        '<F5>',
         function()
-          require("dap").continue()
+          require('dap').continue()
         end,
-        desc = "Debug: Start/Continue"
+        desc = 'Debug: Start/Continue',
       },
       {
-        "<F7>",
+        '<F7>',
         function()
-          require("dap").toggle()
+          require('dap').toggle()
         end,
-        desc = "Debug: See last session result"
+        desc = 'Debug: See last session result',
       },
       {
-        "<F12>",
+        '<F12>',
         function()
-          require("dap").step_out()
+          require('dap').step_out()
         end,
-        desc = "Debug: Step Out"
+        desc = 'Debug: Step Out',
       },
       {
-        "<leader>b",
+        '<leader>b',
         function()
-          require("dap").toggle_breakpoint()
+          require('dap').toggle_breakpoint()
         end,
-        desc = "Debug: Toggle Breakpoint"
+        desc = 'Debug: Toggle Breakpoint',
       },
       {
-        "<leader>B",
+        '<leader>B',
         function()
-          require("dap").set_breakpoint(
-            vim.fn.input("Breakpoint condition: ")
-          )
+          require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
         end,
-        desc = "Debug: Set Breakpoint"
+        desc = 'Debug: Set Breakpoint',
       },
       {
-        "<leader>lp",
+        '<leader>lp',
         function()
-          require("dap").set_breakpoint(
-            nil, nil, vim.fn.input("Log point message: ")
-          )
+          require('dap').set_breakpoint(nil, nil, vim.fn.input 'Log point message: ')
         end,
-        desc = "Debug: Log point message"
+        desc = 'Debug: Log point message',
       },
       {
-        "<leader>dr",
+        '<leader>dr',
         function()
-          require("dap").repl.open()
+          require('dap').repl.open()
         end,
-        desc = "Debug: Open REPL"
+        desc = 'Debug: Open REPL',
       },
-
     },
   },
 }
