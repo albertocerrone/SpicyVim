@@ -44,25 +44,26 @@ return {
       vim.tbl_map(function(type)
         require('luasnip.loaders.from_' .. type).lazy_load()
       end, { 'vscode', 'snipmate', 'lua' })
+      require('luasnip').filetype_extend('python', { 'django-rest', 'django' })
     end,
     opts = {
       history = true,
       delete_check_events = 'TextChanged',
     },
-        -- stylua: ignore
-        keys = {
-            {
-                "<tab>",
-                function()
-                    return require("luasnip").jumpable(1) and "<Plug>luasnip-jump-next" or "<tab>"
-                end,
-                expr = true,
-                silent = true,
-                mode = "i",
-            },
-            { "<tab>",   function() require("luasnip").jump(1) end,   mode = "s" },
-            { "<s-tab>", function() require("luasnip").jump(-1) end,  mode = { "i", "s" } },
-        },
+    -- stylua: ignore
+    keys = {
+      {
+        "<tab>",
+        function()
+          return require("luasnip").jumpable(1) and "<Plug>luasnip-jump-next" or "<tab>"
+        end,
+        expr = true,
+        silent = true,
+        mode = "i",
+      },
+      { "<tab>",   function() require("luasnip").jump(1) end,  mode = "s" },
+      { "<s-tab>", function() require("luasnip").jump(-1) end, mode = { "i", "s" } },
+    },
   },
   -- Autocompletion
   {
@@ -81,6 +82,7 @@ return {
         local line, col = unpack(vim.api.nvim_win_get_cursor(0))
         return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match '%s' == nil
       end
+      local compare = require 'cmp.config.compare'
       return {
         preselect = cmp.PreselectMode.None,
         formatting = {
@@ -126,6 +128,17 @@ return {
             },
           },
         },
+
+        sorting = {
+          priority_weight = 1.0,
+          comparators = {
+            compare.locality,
+            compare.recently_used,
+            compare.score, -- based on :  score = score + ((#sources - (source_index - 1)) * sorting.priority_weight)
+            compare.offset,
+            compare.order,
+          },
+        },
         completion = {
           completeopt = 'menu,menuone,noinsert',
         },
@@ -168,12 +181,13 @@ return {
           documentation = cmp.config.window.bordered(border_opts),
         },
         sources = cmp.config.sources {
-          { name = 'nvim_lsp_signature_help' },
-          { name = 'nvim_lsp' },
           -- { name = 'cmp_tabnine' },
-          { name = 'luasnip' },
-          { name = 'path' },
-          { name = 'buffer' },
+          { name = 'nvim_lsp_signature_help' },
+          { name = 'nvim_lsp', max_item_count = 8, priority = 8 },
+          { name = 'luasnip', priority = 7 },
+          { name = 'buffer', priority = 7 },
+          { name = 'spell', keyword_length = 3, priority = 5, keyword_pattern = [[\w\+]] },
+          { name = 'nvim_lua', priority = 5 },
           {
             name = 'html-css',
             option = {
@@ -186,7 +200,11 @@ return {
                 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
               },
             },
+            priority = 5,
           },
+          -- { name = 'path', priority = 4 },
+          { name = 'fuzzy_path', priority = 4 }, -- from tzacher
+          { name = 'calc', priority = 3 },
         },
         experimental = {
           ghost_text = false,
@@ -198,6 +216,7 @@ return {
       { 'hrsh7th/cmp-nvim-lsp-signature-help' },
       { 'hrsh7th/cmp-nvim-lua' },
       { 'hrsh7th/cmp-path' },
+      { 'tzachar/cmp-fuzzy-path', dependencies = { 'tzachar/fuzzy.nvim' } },
       {
         'onsails/lspkind-nvim',
         opts = {},
@@ -209,12 +228,12 @@ return {
       },
       { 'hrsh7th/cmp-nvim-lsp' },
       { 'saadparwaiz1/cmp_luasnip' },
-      {
-        'Jezda1337/nvim-html-css',
-        init = function()
-          require('html-css'):setup()
-        end,
-      },
+      -- {
+      --   'Jezda1337/nvim-html-css',
+      --   init = function()
+      --     require('html-css'):setup()
+      --   end,
+      -- },
       -- {
       --     'tzachar/cmp-tabnine',
       --     build = './install.sh',
