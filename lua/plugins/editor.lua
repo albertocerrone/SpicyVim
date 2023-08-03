@@ -1,6 +1,38 @@
 local Util = require 'albertocerrone.util'
 
 return {
+  -- which-key helps you remember key bindings by showing a popup
+  -- with the active keybindings of the command you started typing.
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    opts = {
+      plugins = { spelling = true },
+      defaults = {
+        mode = { "n", "v" },
+        ["g"] = { name = "+goto" },
+        ["gz"] = { name = "+surround" },
+        ["]"] = { name = "+next" },
+        ["["] = { name = "+prev" },
+        ["<leader><tab>"] = { name = "+tabs" },
+        ["<leader>b"] = { name = "+buffer" },
+        ["<leader>c"] = { name = "+code" },
+        ["<leader>f"] = { name = "+file/find" },
+        ["<leader>g"] = { name = "+git" },
+        ["<leader>gh"] = { name = "+hunks" },
+        ["<leader>q"] = { name = "+quit/session" },
+        ["<leader>s"] = { name = "+search" },
+        ["<leader>u"] = { name = "+ui" },
+        ["<leader>w"] = { name = "+windows" },
+        ["<leader>x"] = { name = "+diagnostics/quickfix" },
+      },
+    },
+    config = function(_, opts)
+      local wk = require("which-key")
+      wk.setup(opts)
+      wk.register(opts.defaults)
+    end,
+  },
   -- Fuzzy Finder (files, lsp, etc)
   {
     'nvim-telescope/telescope.nvim',
@@ -12,21 +44,21 @@ return {
         function()
           require('telescope.builtin').oldfiles()
         end,
-        { desc = '[?] Find recently opened files' },
+        desc = '[?] Find recently opened files',
       },
       {
         '<leader>:',
         function()
           require('telescope.builtin').command_history()
         end,
-        { desc = '[:] Find from command history' },
+        desc = '[:] Find from command history',
       },
       {
         '<leader><space>',
         function()
           require('telescope.builtin').buffers()
         end,
-        { desc = '[ ] Find existing buffers' },
+        desc = '[ ] Find existing buffers',
       },
       {
         '<leader>/',
@@ -37,7 +69,7 @@ return {
             previewer = false,
           })
         end,
-        { desc = '[/] Fuzzily search in current buffer]' },
+        desc = '[/] Fuzzily search in current buffer]',
       },
 
       {
@@ -45,43 +77,47 @@ return {
         function()
           require('telescope.builtin').git_status()
         end,
-        { desc = 'Search [G]it [S]tatus' },
+        desc = 'Search [G]it [S]tatus',
       },
       {
         '<leader>gc',
         function()
           require('telescope.builtin').git_commits()
         end,
-        { desc = 'Search [G]it [C]ommits' },
+        desc = 'Search [G]it [C]ommits',
       },
       {
         '<leader>ss',
         function()
           require('telescope.builtin').resume()
         end,
-        { desc = 'Resume [S]earch' },
+        desc = 'Resume [S]earch',
       },
-      { '<leader>sf', Util.telescope 'files', { desc = '[S]earch [F]iles' } },
+      { 
+        '<leader>sf', 
+        Util.telescope 'files',
+        desc = '[S]earch [F]iles',
+      },
       {
         '<leader>sh',
         function()
           require('telescope.builtin').help_tags()
         end,
-        { desc = '[S]earch [H]elp' },
+        desc = '[S]earch [H]elp',
       },
       {
         '<leader>sg',
         function()
           require('telescope.builtin').live_grep()
         end,
-        { desc = '[S]earch by [G]rep' },
+        desc = '[S]earch by [G]rep',
       },
       {
         '<leader>sd',
         function()
           require('telescope.builtin').diagnostics()
         end,
-        { desc = '[S]earch [D]iagnostics' },
+        desc = '[S]earch [D]iagnostics',
       },
       {
         '<leader>sP',
@@ -92,11 +128,10 @@ return {
             additional_args = { '--hidden', '--no-ignore-vcs' },
           }
         end,
-        { desc = '[S]earch [P]ackages' },
+        desc = '[S]earch [P]ackages',
       },
     },
     dependencies = {
-      'nvim-lua/plenary.nvim',
       -- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
       { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make', cond = vim.fn.executable 'make' == 1 },
     },
@@ -120,7 +155,7 @@ return {
 
   -- Git related plugins
   {
-    'tpope/vim-fugitive',
+   'tpope/vim-fugitive',
     keys = {
       {
         '<leader>gt',
@@ -128,6 +163,7 @@ return {
           vim.cmd.Git()
           vim.api.nvim_command 'normal! 5j'
         end,
+        desc = 'Git Tab',
       },
     },
     cmd = 'Git',
@@ -146,17 +182,27 @@ return {
 
           local bufnr = vim.api.nvim_get_current_buf()
           local opts = { buffer = bufnr, remap = false }
-          vim.keymap.set('n', '<leader>p', function()
-            vim.cmd.Git 'push'
-          end, opts)
+
+
+          opts.desc = 'Git Push'
+          vim.keymap.set(
+            'n',
+            '<leader>p',
+            function()
+              vim.cmd.Git 'push'
+            end,
+            opts
+          )
 
           -- rebase always
+          opts.desc = 'Git Pull --rebase'
           vim.keymap.set('n', '<leader>P', function()
             vim.cmd.Git { 'pull', '--rebase' }
           end, opts)
 
           -- NOTE: It allows me to easily set the branch i am pushing and any tracking
           -- needed if i did not set the branch up correctly
+          opts.desc = 'Git Push -u origin'
           vim.keymap.set('n', '<leader>t', ':Git push -u origin ', opts)
         end,
       })
@@ -226,7 +272,6 @@ return {
 
   {
     'windwp/nvim-spectre',
-    dependencies = { 'nvim-lua/plenary.nvim' },
     cmd = 'Spectre',
     keys = {
       {

@@ -45,6 +45,7 @@ return {
         require('luasnip.loaders.from_' .. type).lazy_load()
       end, { 'vscode', 'snipmate', 'lua' })
       require('luasnip').filetype_extend('python', { 'django-rest', 'django' })
+      require('luasnip').filetype_extend('htmldjango', { 'html' })
     end,
     opts = {
       history = true,
@@ -253,4 +254,9 @@ return {
       -- },
     },
   },
+  {
+    "iamcco/markdown-preview.nvim",
+    ft = { "markdown" },
+    build = function() vim.fn["mkdp#util#install"]() end,
+}
 }
