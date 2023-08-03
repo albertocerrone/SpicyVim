@@ -106,7 +106,6 @@ return {
       },
       {
         'jay-babu/mason-nvim-dap.nvim',
-        dependencies = { 'nvim-dap' },
         cmd = { 'DapInstall', 'DapUninstall' },
         opts = {
           automatic_setup = true,
@@ -132,38 +131,41 @@ return {
       {
         'rcarriga/nvim-dap-ui',
         opts = {
-          -- icons = { expanded = "▾", collapsed = "▸" },
-          -- mappings = {
-          --   -- Use a table to apply multiple mappings
-          --   expand = { "<CR>", "<2-LeftMouse>" },
-          --   open = "o",
-          --   remove = "d",
-          --   edit = "e",
-          --   repl = "r",
-          --   toggle = "t",
-          -- },
-          -- layouts = {
-          --   {
-          --     elements = {
-          --       "scopes",
-          --       "breakpoints",
-          --       "stacks",
-          --       "watches",
-          --     },
-          --     size = 80,
-          --     position = "left",
-          --   },
-          --   {
-          --     elements = { "repl", "console" },
-          --     size = 0.25,
-          --     position = "bottom",
-          --   },
-          -- },
-          -- render = {
-          --   max_value_lines = 3,
-          -- },
+          force_buffers = false,
+          element_mappings = {
+            scopes = {
+              edit = "l",
+            },
+          },
+          layouts = {
+            {
+              elements = {
+                "scopes",
+                "breakpoints",
+                "stacks",
+                -- "watches",
+              },
+              size = 80,
+              position = "left",
+            },
+            {
+              elements = { "repl", "console" },
+              size = 0.25,
+              position = "bottom",
+            },
+          },
+          render = {
+            max_value_lines = 3,
+          },
           floating = { max_width = 0.9, max_height = 0.5, border = 'rounded' },
         },
+        config = function(_, opts)
+          local dap, dapui = require "dap", require "dapui"
+          dap.listeners.after.event_initialized["dapui_config"] = function() dapui.open() end
+          dap.listeners.before.event_terminated["dapui_config"] = function() dapui.close() end
+          dap.listeners.before.event_exited["dapui_config"] = function() dapui.close() end
+          dapui.setup(opts)
+        end,
       },
       {
         'mfussenegger/nvim-dap-python',
@@ -198,6 +200,22 @@ return {
       end
 
       require('dap.ext.vscode').load_launchjs()
+      local dap_icons = {
+        Stopped = { "󰁕 ", "DiagnosticWarn", "DapStoppedLine" },
+        Breakpoint = " ",
+        BreakpointCondition = " ",
+        BreakpointRejected = { " ", "DiagnosticError" },
+        LogPoint = ".>",
+      }
+      vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
+
+      for name, sign in pairs(dap_icons) do
+        sign = type(sign) == "table" and sign or { sign }
+        vim.fn.sign_define(
+          "Dap" .. name,
+          { text = sign[1], texthl = sign[2] or "DiagnosticInfo", linehl = sign[3], numhl = sign[3] }
+        )
+      end
     end,
     keys = {
       {

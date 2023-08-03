@@ -94,7 +94,7 @@ return {
       function custom_fname:update_status()
         local data = custom_fname.super.update_status(self)
         data = highlight.component_format_highlight(vim.bo.modified and self.status_colors.modified or
-        self.status_colors.saved) .. data
+          self.status_colors.saved) .. data
         return data
       end
 
@@ -105,7 +105,7 @@ return {
           component_separators = { left = '', right = '' },
           -- section_separators = { left = '', right = '' },
           disabled_filetypes = {
-            statusline = {},
+            statusline = { 'dashboard', 'alpha', },
             winbar = {},
           },
           ignore_focus = {},

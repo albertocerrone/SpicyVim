@@ -77,8 +77,8 @@ return {
       local _, lspkind = pcall(require, 'lspkind')
 
       local border_opts = {
-        border = 'single',
-        winhighlight = 'Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None',
+        border = "rounded",
+        winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
       }
       local function has_words_before()
         local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -153,7 +153,7 @@ return {
           end,
         },
         mapping = cmp.mapping.preset.insert {
-          ['<C-f>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-u>'] = cmp.mapping.scroll_docs(-4),
           ['<C-d>'] = cmp.mapping.scroll_docs(4),
           ['<C-Tab>'] = cmp.mapping.complete(),
           ['<CR>'] = cmp.mapping.confirm {
